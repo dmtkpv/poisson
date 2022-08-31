@@ -19,46 +19,45 @@ const { points } = createPoisson({
 
 ## Options
 
-### `width`, `height`
+#### `width`, `height`
 The area where the points will be placed  
 **Default: 100, 100**
 
-### `distance`
+#### `distance`
 Minimum distance between points  
 **Default: 10**
 
-### `ratio`
+#### `ratio`
 Ratio between X-axis distance and Y-axis distance  
 **Default: 1**
 
-### `attempts`
+#### `attempts`
 Number of attempts to place a point (the higher the value, the more accurate, but lower performance)  
 **Default: 20**
 
-### `linkHorizontal`, `linkVertical` 
+#### `linkHorizontal`, `linkVertical` 
 Take into account the distance between the end and the beginning   
 **Default: false**
 
-
-### `beforeCreate(point)`
+#### `beforeCreate(point)`
 Runs before the point is created, must return `x` and `y`
 
 
 
 ## Return properties
 
-### `radius { x, y }`
+#### `radius { x, y }`
 Radius of the ellipse on which new points are created
 
-### `cell { width, height }`
+#### `cell { width, height }`
 Cell size that can contain only one point
 
-### `grid { width, height }`
+#### `grid { width, height }`
 Number of cells in width and height
 
-### `origin { x, y, gridX, gridY }`
+#### `origin { x, y, gridX, gridY }`
 Coordinates of the very first point
 
-### `points [{ x, y, gridX, gridY }]`
+#### `points [{ x, y, gridX, gridY }]`
 Points that have been placed
 
