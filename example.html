@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2D Poisson disk sampling based</title>
+</head>
+<body>
+    <canvas width="800" height="600"></canvas>
+    <script src="poisson.js"></script>
+    <script>
+
+        const canvas = document.querySelector('canvas');
+        const ctx = canvas.getContext('2d');
+
+        const { cell, grid, points } = createPoisson({
+            width: canvas.width,
+            height: canvas.height,
+            distance: 20,
+            ratio: 2,
+            linkHorizontal: true,
+            linkVertical: true
+        })
+
+        ctx.fillStyle = '#FAFAFA'
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.strokeStyle = '#CCC'
+        ctx.beginPath();
+
+        for (let x = 0; x < grid.width; x++) {
+            ctx.moveTo(x * cell.width, 0);
+            ctx.lineTo(x * cell.width, canvas.height);
+        }
+
+        for (let y = 0; y < grid.height; y++) {
+            ctx.moveTo(0, y * cell.height);
+            ctx.lineTo(canvas.width, y * cell.height);
+        }
+
+        ctx.closePath();
+        ctx.stroke();
+        ctx.fillStyle = '#F00'
+
+        for (const point of points) {
+            ctx.fillRect(point.x - 2, point.y - 2, 4, 4)
+        }
+
+    </script>
+</body>
+</html>
