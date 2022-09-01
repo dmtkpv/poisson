@@ -6,12 +6,12 @@ export default function createPoisson (options) {
     // Data
     // ------------------------
 
-    const { width, height, distance, ratio, attempts, beforeCreate } = Object.assign({
+    const { width, height, distance, ratio, tries, linkHorizontal, linkVertical, beforeCreate } = Object.assign({
         width: 100,
         height: 100,
         distance: 10,
         ratio: 1,
-        attempts: 20,
+        tries: 20,
         linkHorizontal: false,
         linkVertical: false,
         beforeCreate: point => point
@@ -90,29 +90,48 @@ export default function createPoisson (options) {
         return Math.pow(point.x - origin.x, 2) / Math.pow(radius.x, 2) + Math.pow(point.y - origin.y, 2) / Math.pow(radius.y, 2) <= 1;
     }
 
-    function translateGridX ({ gridX }, i) {
-        let x = gridX - 2 + i;
-        let translateX = 0;
-        if (x < 0) {
-            x = x + grid.width;
-            translateX = -width
+
+
+    // ------------------------
+    // Neighbors
+    // ------------------------
+
+    function getNeighbors (origin, max, translate, link) {
+        const neighbors = [];
+        for (let i = 0; i < 5; i++) {
+            let value = origin - 2 + i;
+            let delta = 0;
+            if (value < 0) {
+                if (link) delta = 1;
+                else continue;
+            }
+            if (value >= max) {
+                if (link) delta = -1;
+                else continue;
+            }
+            neighbors.push({
+                value: value + max * delta,
+                translate: translate * -delta
+            })
         }
-        if (x >= grid.width) {
-            x = x - grid.width;
-            translateX = width;
-        }
-        return { x, translateX }
+        return neighbors;
+    }
+
+    function translate (point, tx, ty) {
+        point = { ...point };
+        point.x += tx;
+        point.y += ty;
+        return point;
     }
 
     function hasNeighbor (point) {
-        const y1 = Math.max(point.gridY - 2, 0);
-        const y2 = Math.min(point.gridY + 2, grid.height - 1);
-        for (let i = 0; i < 5; i++) {
-            const { x, translateX } = translateGridX(point, i);
-            for (let y = y1; y <= y2; y++) {
-                let origin = projected[x][y];
+        const xs = getNeighbors(point.gridX, grid.width, width, linkHorizontal);
+        const ys = getNeighbors(point.gridY, grid.height, height, linkVertical);
+        for (const x of xs) {
+            for (const y of ys) {
+                let origin = projected[x.value][y.value];
                 if (!origin) continue;
-                if (translateX) origin = { ...origin, x: origin.x + translateX }
+                origin = translate(origin, x.translate, y.translate)
                 if (inEllipse(origin, point)) return origin;
             }
         }
@@ -126,7 +145,7 @@ export default function createPoisson (options) {
 
     while (pending.length) {
         const current = pending.pop();
-        for (let i = 0; i < attempts; i++) {
+        for (let i = 0; i < tries; i++) {
             const point = createPointAround(current);
             if (outsideCanvas(point)) continue;
             if (hasNeighbor(point)) continue;
