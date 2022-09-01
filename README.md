@@ -23,7 +23,7 @@ const { points } = createPoisson({
 ```js
 const poisson = createPoisson({
 
-    // The size of the rectangle on which the points will be placed
+    // Size of the rectangle on which the points will be placed
     width: 100,
     height: 100,
 
@@ -35,7 +35,7 @@ const poisson = createPoisson({
 
     // Number of attempts to place a point 
     // (the higher the value, the more accurate, but lower performance)
-    attempts: 20,
+    tries: 20,
 
     // Take into account the distance between the end and the beginning
     linkHorizontal: false,
