@@ -2,8 +2,15 @@
     "name": "@dmtkpv/poisson",
     "version": "1.0.0",
     "description": "2D Poisson disk sampling based",
+    "main": "dist/poisson.js",
     "keywords": [
-
+        "poisson"
+    ],
+    "files": [
+        "dist/poisson.js",
+        "dist/poisson.js.map",
+        "LICENSE",
+        "README.md"
     ],
     "scripts": {
         "serve": "webpack serve --mode=development",
@@ -14,5 +21,8 @@
         "webpack-cli": "^4.10.0",
         "webpack-dev-server": "^4.10.0"
     },
-    "dependencies": {}
+    "dependencies": {},
+    "repository": "github:dmtkpv/poisson",
+    "license": "MIT",
+    "author": "Dmitriy Karpov"
 }
